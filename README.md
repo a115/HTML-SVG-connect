@@ -56,7 +56,7 @@ These are defined as properties at the same level as the *paths* property.
 
 ## Author
 
-Owain Lewis
+Owain Lewis / A115
 
 Based on work by [alojzije](https://github.com/alojzije): [connectHTMLelements_SVG.png](https://gist.github.com/alojzije/11127839)
 
