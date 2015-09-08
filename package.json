@@ -1,5 +1,5 @@
 {
-  "name": "HTML-SVG-connect",
+  "name": "html-svg-connect",
   "version": "2.0.0",
   "title": "jQuery HTML SVG connect",
   "description": "A plugin to draw paths between arbitrary HTML elements (with SVG).",
