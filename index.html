@@ -1,0 +1,103 @@
+<!--
+/*
+ * jQuery HTML SVG connect Plugin Demo
+ * https://github.com/a115/HTML-SVG-connect
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>HTML-SVG-connect: a jQuery plugin</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="jquery.html-svg-connect.js"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $("#svgContainer").HTMLSVGconnect({
+        stroke: "#000",
+        strokeWidth: 8,
+        orientation: "auto",
+        paths: [
+          { start: "#red", end: "#aqua", strokeWidth: 12, },
+          { start: "#purple", end: "#green", stroke: "red", }
+        ]
+      });
+    });
+  </script>
+  <style>
+    #svgContainer {
+      z-index: -10;
+      position: absolute;
+
+      background-color: silver;
+      opacity: 0.5;
+    }
+    
+    body {
+      background-color: gray;
+    }
+    div {
+      opacity: 0.6;
+    }
+    #outer {
+      margin: 0 auto;
+      width: 80%;
+    }
+    #teal {
+      width: 6em;
+      height: 6em;
+      background-color: teal;
+      margin-left: 10%;
+    }
+    #orange {
+      height: 4em;
+      width: 35%;
+      padding: 2em 8em;
+      margin-left: 15em;
+      margin-top: 6em;
+      background-color: orange;
+    }
+    #red {
+      width: 6em;
+      height: 4em;
+      margin-left: 40%;
+      padding: 4em 3em;
+      background-color: red;
+    }
+    #aqua {
+      width: 5em;
+      height: 5em;
+      margin-left: 10%;
+      background-color: aqua;
+    }
+    #purple {
+      width: 9em;
+      height: 5em;
+      background-color: purple;
+    }
+    #green {
+      width: 5em;
+      height: 7em;
+      margin-top: 2em;
+      margin-left: 50%;
+      background-color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="svgContainer"></div>
+
+  <div id="outer">
+    <div id="aqua" style="margin-bottom: 150px"></div>
+    <div id="red"></div>
+    <div id="green" style="margin-bottom: 100px; margin-left: 200px;"></div>
+    <div id="purple"></div>
+  </div>
+
+</body>
+</html>

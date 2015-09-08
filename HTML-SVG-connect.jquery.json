@@ -1,0 +1,26 @@
+{
+    "name": "HTML-SVG-connect",
+    "version": "2.0.0",
+    "title": "jQuery HTML SVG connect",
+    "description": "A plugin to draw paths between arbitrary HTML elements (with SVG).",
+    "keywords": [
+        "svg",
+        "draw",
+        "paths"
+    ],
+    "author": {
+        "name": "Owain Lewis"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "dependencies": {
+        "jquery": ">=1.7.1"
+    },
+    "homepage": "https://github.com/a115/HTML-SVG-connect",
+    "download": "https://github.com/a115/HTML-SVG-connect/archive/master.zip",
+    "bugs": "https://github.com/a115/HTML-SVG-connect/issues"
+}
