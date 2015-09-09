@@ -17,9 +17,10 @@
       // define the selectors of the elements to connect:
       // i.e., {start: "#purple", end: "#green"}.
       // Optional properties:
-      //	"stroke": [color],
-      //	"strokeWidth": [px],
-      //	"orientation": [horizontal|vertical|auto (default)]
+      //  "stroke": [color],
+      //  "strokeWidth": [px],
+      //  "orientation": [horizontal|vertical|auto (default)]
+      //  "offset": [px]
       paths: []
     };
 
@@ -46,8 +47,8 @@
       this.$svg.attr("height", 0).attr("width", 0);
       var self = this;
       // Recalculate paths.
-      $.each(this.loadedPaths, function (i, pathRef) {
-        self.connectElements(pathRef.path, pathRef.start, pathRef.end, pathRef.orientation);
+      $.each(this.loadedPaths, function (i, pathData) {
+        self.connectElements(pathData);
       });
     },
 
@@ -64,20 +65,25 @@
             .attr("stroke", stroke)
             .attr("stroke-width", strokeWidth);
           this.$svg.append($path);
-          // Custom/default forced orientation of path.
-          var orientation = pathConfig.hasOwnProperty("orientation") ? pathConfig.orientation : "auto";
-          this.connectElements($path, $start, $end, orientation);
+          var pathData = {
+            "path": $path,
+            "start": $start,
+            "end": $end,
+            "orientation": pathConfig.hasOwnProperty("orientation") ? pathConfig.orientation : this.settings.orientation,
+            "offset": pathConfig.hasOwnProperty("offset") ? parseInt(pathConfig.offset) : 0
+            };
+          this.connectElements(pathData);
           // Save for reference.
-          return { "path": $path, "start": $start, "end": $end, "orientation": orientation };
+          return pathData;
         }
       }
       return null; // Ignore/invalid.
     },
     
-		// Whether the path should originate from the top/bottom or the sides;
+    // Whether the path should originate from the top/bottom or the sides;
     // based on whichever is greater: the horizontal or vertical gap between the elements
-		// (this depends on the user positioning the elements sensibly,
-		// and not overlapping them).
+    // (this depends on the user positioning the elements sensibly,
+    // and not overlapping them).
     determineOrientation: function ($startElem, $endElem) {
       // If first element is lower than the second, swap.
       if ($startElem.offset().top > $endElem.offset().top) {
@@ -100,16 +106,13 @@
       return horizontalGap > verticalGap ? "vertical" : "horizontal";
     },
 
-    connectElements: function ($path, $startElem, $endElem, orientation) {
-      // Orientation not set per path.
+    connectElements: function (pathData) {
+      var $startElem = pathData.start,
+      $endElem = pathData.end,
+      orientation = pathData.orientation;
+      // Orientation not set per path and/or defaulted to global "auto".
       if (orientation != "vertical" && orientation != "horizontal") {
-        // Check if global orientation has been set.
-        if (this.settings.orientation != "vertical" && this.settings.orientation != "horizontal") {
-          // Automatically determine. 
-          orientation = this.determineOrientation($startElem, $endElem);
-        } else {
-          orientation = this.settings.orientation; // User forced setting.
-        }
+        orientation = this.determineOrientation($startElem, $endElem);
       }
       var swap = false;
       if (orientation == "vertical") {
@@ -148,10 +151,10 @@
       var endX = endCoord.left + centreEX * $endElem.outerWidth() - svgLeft;
       var endY = endCoord.top + centreEY * $endElem.outerHeight() - svgTop;
 
-      this.drawPath($path, startX, startY, endX, endY, orientation);
+      this.drawPath(pathData.path, pathData.offset, orientation, startX, startY, endX, endY);
     },
 
-    drawPath: function ($path, startX, startY, endX, endY, orientation) {
+    drawPath: function ($path, offset, orientation, startX, startY, endX, endY) {
       var stroke = parseFloat($path.attr("stroke-width"));
       // Check if the svg is big enough to draw the path, if not, set height/width.
       if (this.$svg.attr("width") < (Math.max(startX, endX) + stroke)) this.$svg.attr("width", (Math.max(startX, endX) + stroke));
@@ -175,10 +178,10 @@
         // Draw the pipe-like path
         // 1. move a bit right, 2. arch, 3. move a bit down, 4.arch, 5. move right to the end
         $path.attr("d", "M" + startX + " " + startY +
-          " H" + (startX + delta) +
-          " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + 2 * delta) + " " + (startY + delta * sigY) +
+          " H" + (startX + offset + delta) +
+          " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + offset + 2 * delta) + " " + (startY + delta * sigY) +
           " V" + (endY - delta * sigY) +
-          " A" + delta + " " + delta + " 0 0 " + arc2 + " " + (startX + 3 * delta) + " " + endY +
+          " A" + delta + " " + delta + " 0 0 " + arc2 + " " + (startX + offset + 3 * delta) + " " + endY +
           " H" + endX);
       } else {
         //Horizontal
@@ -192,10 +195,10 @@
         // Draw the pipe-like path
         // 1. move a bit down, 2. arch, 3. move a bit to the right, 4.arch, 5. move down to the end 
         $path.attr("d", "M" + startX + " " + startY +
-          " V" + (startY + delta) +
-          " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + delta * sigX) + " " + (startY + 2 * delta) +
+          " V" + (startY + offset + delta) +
+          " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + delta * sigX) + " " + (startY + offset + 2 * delta) +
           " H" + (endX - delta * sigX) +
-          " A" + delta + " " + delta + " 0 0 " + arc2 + " " + endX + " " + (startY + 3 * delta) +
+          " A" + delta + " " + delta + " 0 0 " + arc2 + " " + endX + " " + (startY + offset + 3 * delta) +
           " V" + endY);
       }
     },
