@@ -43,13 +43,10 @@
       $(window).on("resize", this.throttle(this.reset, 200, this));
     },
 
+    // Recalculate paths.
     reset: function () {
       this.$svg.attr("height", 0).attr("width", 0);
-      var self = this;
-      // Recalculate paths.
-      $.each(this.loadedPaths, function (i, pathData) {
-        self.connectElements(pathData);
-      });
+      $.map(this.loadedPaths, $.proxy(this.connectElements, this));
     },
 
     connectSetup: function (pathConfig) {
