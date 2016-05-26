@@ -1,17 +1,22 @@
 # HTML SVG connect
+[![npm](https://img.shields.io/npm/v/html-svg-connect.svg?maxAge=2592000)](https://www.npmjs.com/package/html-svg-connect)
 
 jQuery plugin for drawing paths between arbitrary HTML elements (with SVG).
 
 ---
 
-## Usage
-
-First, load jQuery and the plugin:
-
+## Install
+Load jQuery and the plugin:
 ```html
 <script src="jquery.min.js" type="text/javascript"></script>
 <script src="jquery.html-svg-connect.js" type="text/javascript"></script>
 ```
+or install with npm:
+```
+npm install html-svg-connect
+```
+
+## Usage
 
 Attach it to your container element on DOM ready, and define your paths as an array. Each path is an object with the start and end elements defined as CSS selector **ID**s:
 
