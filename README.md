@@ -51,7 +51,7 @@ These are defined as properties at the same level as the *paths* property.
 
 ```js
 {
-  stroke: "00FF00",
+  stroke: "#00FF00",
   strokeWidth: 12,
   paths: [
     { start: "#red", end: "#aqua", stroke: "#FF0000", strokeWidth: 8 },
