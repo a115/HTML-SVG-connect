@@ -46,6 +46,7 @@ These are defined as properties at the same level as the *paths* property.
 | strokeWidth | integer | Path thickness (px) | 10 |
 | orientation | string | Whether the path begins/ends from the side of the element or from the top/bottom. Options: [horizontal &#124; vertical &#124; auto] | auto |
 | offset | integer | Number of pixels added to the path before the first curve. | 0 |
+| class | string | Path class (css) name. | empty |
 
 **The global options can also be overridden on a per path basis:**
 
@@ -53,12 +54,13 @@ These are defined as properties at the same level as the *paths* property.
 {
   stroke: "#00FF00",
   strokeWidth: 12,
+  class: "",
   paths: [
     { start: "#red", end: "#aqua", stroke: "#FF0000", strokeWidth: 8 },
-    { start: "#purple", end: "#green", orientation: "vertical", offset: 20 }
+    { start: "#purple", end: "#green", orientation: "vertical", offset: 20, class: "dashed-blue" }
   ]
 }
-``` 
+```
 
 ## Author
 
