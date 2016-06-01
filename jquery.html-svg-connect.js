@@ -58,6 +58,9 @@
           // Custom/default path properties.
           var stroke = pathConfig.hasOwnProperty("stroke") ? pathConfig.stroke : this.settings.stroke;
           var strokeWidth = pathConfig.hasOwnProperty("strokeWidth") ? pathConfig.strokeWidth : this.settings.strokeWidth;
+          if (pathConfig.hasOwnProperty("class")) {
+            $path.attr("class", pathConfig.class);
+          }
           $path.attr("fill", "none")
             .attr("stroke", stroke)
             .attr("stroke-width", strokeWidth);
@@ -76,7 +79,7 @@
       }
       return null; // Ignore/invalid.
     },
-    
+
     // Whether the path should originate from the top/bottom or the sides;
     // based on whichever is greater: the horizontal or vertical gap between the elements
     // (this depends on the user positioning the elements sensibly,
@@ -124,7 +127,7 @@
         $startElem = $endElem;
         $endElem = temp;
       }
-      // Get (top, left) corner coordinates of the svg container. 
+      // Get (top, left) corner coordinates of the svg container.
       var svgTop = this.$element.offset().top;
       var svgLeft = this.$element.offset().left;
 
@@ -190,7 +193,7 @@
           arc2 = 0;
         }
         // Draw the pipe-like path
-        // 1. move a bit down, 2. arch, 3. move a bit to the right, 4.arch, 5. move down to the end 
+        // 1. move a bit down, 2. arch, 3. move a bit to the right, 4.arch, 5. move down to the end
         $path.attr("d", "M" + startX + " " + startY +
           " V" + (startY + offset + delta) +
           " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + delta * sigX) + " " + (startY + offset + 2 * delta) +
@@ -199,12 +202,12 @@
           " V" + endY);
       }
     },
-    
+
     // Chrome Math.sign() support.
     sign: function (x) {
       return x > 0 ? 1 : x < 0 ? -1 : x;
     },
-    
+
     // https://remysharp.com/2010/07/21/throttling-function-calls
     throttle: function (fn, threshhold, scope) {
       threshhold || (threshhold = 250);

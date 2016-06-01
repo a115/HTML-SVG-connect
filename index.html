@@ -22,7 +22,7 @@
         strokeWidth: 8,
         orientation: "auto",
         paths: [
-          { start: "#red", end: "#aqua", strokeWidth: 12, offset: 20 },
+          { start: "#red", end: "#aqua", strokeWidth: 12, offset: 20, class: "dashed-blue" },
           { start: "#purple", end: "#green", stroke: "red" }
         ]
       });
@@ -36,7 +36,7 @@
       background-color: silver;
       opacity: 0.5;
     }
-    
+
     body {
       background-color: gray;
     }
@@ -85,6 +85,10 @@
       margin-top: 2em;
       margin-left: 50%;
       background-color: green;
+    }
+    .dashed-blue {
+      stroke-dasharray: 10px;
+      stroke: blue;
     }
   </style>
 </head>
