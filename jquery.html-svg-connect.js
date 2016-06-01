@@ -13,6 +13,7 @@
       stroke: "#000000",
       strokeWidth: 12,
       orientation: "auto",
+      class: "",
       // Array of objects with properties "start" & "end" that
       // define the selectors of the elements to connect:
       // i.e., {start: "#purple", end: "#green"}.
@@ -58,12 +59,11 @@
           // Custom/default path properties.
           var stroke = pathConfig.hasOwnProperty("stroke") ? pathConfig.stroke : this.settings.stroke;
           var strokeWidth = pathConfig.hasOwnProperty("strokeWidth") ? pathConfig.strokeWidth : this.settings.strokeWidth;
-          if (pathConfig.hasOwnProperty("class")) {
-            $path.attr("class", pathConfig.class);
-          }
+          var path_class = pathConfig.hasOwnProperty("class") ? pathConfig.class : this.settings.class;
           $path.attr("fill", "none")
             .attr("stroke", stroke)
-            .attr("stroke-width", strokeWidth);
+            .attr("stroke-width", strokeWidth)
+            .attr("class", path_class);
           this.$svg.append($path);
           var pathData = {
             "path": $path,
