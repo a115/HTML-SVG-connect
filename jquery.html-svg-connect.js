@@ -203,6 +203,17 @@
       }
     },
 
+    /*
+     * Add array of path objects
+     * e.g., var paths = [{ start: "#red", end: "#green" }, { start: "#aqua", end: "#green", stroke: "blue" }];
+     * Public method within the plugin's prototype:
+     * $("#svgContainer").HTMLSVGconnect("addPaths", paths);
+     */
+    addPaths: function(paths) {
+      var loadedPaths = $.map(paths, $.proxy(this.connectSetup, this));
+      Array.prototype.push.apply(this.loadedPaths, loadedPaths);
+    },
+
     // Chrome Math.sign() support.
     sign: function (x) {
       return x > 0 ? 1 : x < 0 ? -1 : x;
@@ -228,24 +239,6 @@
         }
       };
     },
-    
-    /*
-	 * Add paths object
-	 * e.g., paths = [{ start: "#red", end: "#green", stroke: "blue" },{ start: "#red", end: "#yellow", stroke: "blue" }];
-	 * Public method within the plugin's prototype:
-	 * $("#svgContainer").HTMLSVGconnect("addPaths", paths);
-	 */
-	addPaths: function (paths) {
-	
-		var connRef = this;
-		$.each(paths, function (i, ref) {
-			var loadedPath = connRef.connectSetup(paths[i]);
-			if (loadedPath) {
-				connRef.loadedPaths.push(loadedPath);
-			}
-		});
-	
-	}
   });
 
   // A really lightweight plugin wrapper around the constructor,
