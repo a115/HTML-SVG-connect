@@ -36,6 +36,16 @@ Attach it to your container element on DOM ready, and define your paths as an ar
 
 This will draw an SVG graphic with two pipes between the respective elements, and recalculate them as the window re-sizes.
 
+Paths can also be added on-demand after loading (e.g., after an AJAX call), by calling **addPaths** with an array of path objects to add (this array has the same options available as when initialising paths).
+
+```javascript
+var newPaths = [
+  { start: "#red", end: "#green" }, 
+  { start: "#aqua", end: "#green" }
+ ];
+$("#svgContainer").HTMLSVGconnect("addPaths", newPaths);
+```
+
 ### Options
 
 These are defined as properties at the same level as the *paths* property.
