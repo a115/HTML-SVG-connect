@@ -1,7 +1,9 @@
 # HTML SVG connect
 [![npm](https://img.shields.io/npm/v/html-svg-connect.svg?maxAge=2592000)](https://www.npmjs.com/package/html-svg-connect)
 
-jQuery plugin for drawing paths between arbitrary HTML elements (with SVG).
+jQuery plugin for drawing responsive paths between arbitrary HTML elements (with SVG).
+
+View demo at http://a115.github.io/HTML-SVG-connect/
 
 ---
 
