@@ -39,6 +39,9 @@
       this.$svg = $(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
       this.$svg.attr("height", 0).attr("width", 0);
       this.$element.append(this.$svg);
+      // markers for arrows
+      this.$defs = $(document.createElementNS("http://www.w3.org/2000/svg", "defs"));
+      this.$svg.append(this.$defs);
       // Draw the paths, and store references to the loaded elements.
       this.loadedPaths = $.map(this.settings.paths, $.proxy(this.connectSetup, this));
       $(window).on("resize", this.throttle(this.reset, 200, this));
@@ -65,10 +68,16 @@
             .attr("stroke-width", strokeWidth)
             .attr("class", path_class);
           this.$svg.append($path);
+
+          if (pathConfig.isArrow) {
+            var markerId = this._createSvgMarker(stroke, pathId);
+          }
+
           var pathData = {
             "path": $path,
             "start": $start,
             "end": $end,
+            "markerId": markerId,
             "orientation": pathConfig.hasOwnProperty("orientation") ? pathConfig.orientation : this.settings.orientation,
             "offset": pathConfig.hasOwnProperty("offset") ? parseInt(pathConfig.offset) : 0
             };
@@ -78,6 +87,28 @@
         }
       }
       return null; // Ignore/invalid.
+    },
+
+    _createSvgMarker(stroke, pathId) {
+      // marker
+      var marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+      var markerId = "marker_" + pathId;
+      marker.setAttribute("id", markerId);
+      marker.setAttribute("orient", "auto");
+      marker.setAttribute("markerWidth", "2");
+      marker.setAttribute("markerHeight", "4");
+      marker.setAttribute("markerHeight", "4");
+      marker.setAttribute("refX", "1.5");
+      marker.setAttribute("refY", "2");
+
+      // markerPath
+      var markerPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      markerPath.setAttribute("d", "M0,0 V4 L2,2 Z");
+      markerPath.setAttribute("fill", stroke);
+      var $marker = $(marker);
+      $marker.append($(markerPath));
+      this.$defs.append($marker);
+      return markerId;
     },
 
     // Whether the path should originate from the top/bottom or the sides;
@@ -152,13 +183,16 @@
       var endY = endCoord.top + centreEY * $endElem.outerHeight() - svgTop;
 
       this.drawPath(pathData.path, pathData.offset, orientation, startX, startY, endX, endY);
+      if (pathData.markerId != undefined) {
+        this.drawMarker(pathData.path, pathData.markerId);
+      }
     },
 
     drawPath: function ($path, offset, orientation, startX, startY, endX, endY) {
       var stroke = parseFloat($path.attr("stroke-width"));
       // Check if the svg is big enough to draw the path, if not, set height/width.
-      if (this.$svg.attr("width") < (Math.max(startX, endX) + stroke)) this.$svg.attr("width", (Math.max(startX, endX) + stroke));
-      if (this.$svg.attr("height") < (Math.max(startY, endY) + stroke)) this.$svg.attr("height", (Math.max(startY, endY) + stroke));
+      if (this.$svg.attr("width") < (Math.max(startX, endX) + stroke)) this.$svg.attr("width", (Math.max(startX, endX) + stroke + 3));
+      if (this.$svg.attr("height") < (Math.max(startY, endY) + stroke)) this.$svg.attr("height", (Math.max(startY, endY) + stroke + 3));
 
       var deltaX = (Math.max(startX, endX) - Math.min(startX, endX)) * 0.15;
       var deltaY = (Math.max(startY, endY) - Math.min(startY, endY)) * 0.15;
@@ -201,6 +235,10 @@
           " A" + delta + " " + delta + " 0 0 " + arc2 + " " + endX + " " + (startY + offset + 3 * delta) +
           " V" + endY);
       }
+    },
+
+    drawMarker($path, markerId) {
+      $path.attr("marker-end", "url(#" + markerId + ")");
     },
 
     /*
