@@ -38,10 +38,10 @@
     init: function () {
       this.$svg = $(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
       this.$svg.attr("height", 0).attr("width", 0);
+      this.$element.append(this.$svg);
       // text
       this.$text = $(document.createElementNS("http://www.w3.org/2000/svg", "text"));
       this.$svg.append(this.$text);
-      this.$element.append(this.$svg);
       // Draw the paths, and store references to the loaded elements.
       this.loadedPaths = $.map(this.settings.paths, $.proxy(this.connectSetup, this));
       $(window).on("resize", this.throttle(this.reset, 200, this));
