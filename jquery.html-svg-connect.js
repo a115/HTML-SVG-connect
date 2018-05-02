@@ -38,6 +38,9 @@
     init: function () {
       this.$svg = $(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
       this.$svg.attr("height", 0).attr("width", 0);
+      // text
+      this.$text = $(document.createElementNS("http://www.w3.org/2000/svg", "text"));
+      this.$svg.append(this.$text);
       this.$element.append(this.$svg);
       // Draw the paths, and store references to the loaded elements.
       this.loadedPaths = $.map(this.settings.paths, $.proxy(this.connectSetup, this));
@@ -50,7 +53,7 @@
       $.map(this.loadedPaths, $.proxy(this.connectElements, this));
     },
 
-    connectSetup: function (pathConfig) {
+    connectSetup: function (pathConfig, i) {
       if (pathConfig.hasOwnProperty("start") && pathConfig.hasOwnProperty("end")) {
         var $start = $(pathConfig.start), $end = $(pathConfig.end);
         // Start/end elements exist.
@@ -60,15 +63,24 @@
           var stroke = pathConfig.hasOwnProperty("stroke") ? pathConfig.stroke : this.settings.stroke;
           var strokeWidth = pathConfig.hasOwnProperty("strokeWidth") ? pathConfig.strokeWidth : this.settings.strokeWidth;
           var path_class = pathConfig.hasOwnProperty("class") ? pathConfig.class : this.settings.class;
+          var pathId = "path_" + i;
           $path.attr("fill", "none")
             .attr("stroke", stroke)
             .attr("stroke-width", strokeWidth)
-            .attr("class", path_class);
+            .attr("class", path_class)
+            .attr("id", pathId);
           this.$svg.append($path);
+
+          if (pathConfig.text) {
+            var $tspan = this._createSvgTextPath(pathConfig.text, strokeWidth, pathId);
+          }
+
           var pathData = {
             "path": $path,
             "start": $start,
             "end": $end,
+            "text": pathConfig.text,
+            "tspan": $tspan,
             "orientation": pathConfig.hasOwnProperty("orientation") ? pathConfig.orientation : this.settings.orientation,
             "offset": pathConfig.hasOwnProperty("offset") ? parseInt(pathConfig.offset) : 0
             };
@@ -78,6 +90,26 @@
         }
       }
       return null; // Ignore/invalid.
+    },
+
+    _createSvgTextPath(text, strokeWidth, pathId) {
+      // textPath
+      var textPathElement = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+      textPathElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + pathId);
+      textPathElement.setAttribute("startOffset", "50%");
+      var $textPath = $(textPathElement);
+      this.$text.append($textPath);
+      var tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+      $textPath.append($(tspan));
+      var dy = (strokeWidth / 2) + 2;
+      tspan.setAttribute("dy",  - dy);
+      // need to reset the dy, another tspan is needed
+      var otherTspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+      $textPath.append($(otherTspan));
+      otherTspan.setAttribute("dy", dy);
+      $(otherTspan).text(" ");
+      var $tspan = $(tspan);
+      return $tspan;
     },
 
     // Whether the path should originate from the top/bottom or the sides;
@@ -152,6 +184,9 @@
       var endY = endCoord.top + centreEY * $endElem.outerHeight() - svgTop;
 
       this.drawPath(pathData.path, pathData.offset, orientation, startX, startY, endX, endY);
+      if (pathData.text != undefined && pathData.tspan != undefined) {
+        this.drawText(pathData.text, pathData.tspan);
+      }
     },
 
     drawPath: function ($path, offset, orientation, startX, startY, endX, endY) {
@@ -201,6 +236,13 @@
           " A" + delta + " " + delta + " 0 0 " + arc2 + " " + endX + " " + (startY + offset + 3 * delta) +
           " V" + endY);
       }
+    },
+
+    /*
+     * Draw text for a path, takes the text for a path and the id of the path element and will create a textPath element.
+     */
+    drawText(text, $textPath) {
+      $textPath.text(text);
     },
 
     /*
