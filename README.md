@@ -28,22 +28,22 @@ Attach it to your container element on DOM ready, and define your paths as an ar
     jQuery(document).ready(function($) {
       $("#svgContainer").HTMLSVGconnect({
         paths: [
-          { start: "#red", end: "#aqua" },
-          { start: "#purple", end: "#green" }
+          { start: "#red", end: "#aqua", text: "hello" },
+          { start: "#purple", end: "#green", text: "world" }
         ]
       });
     });
 </script>
 ```
 
-This will draw an SVG graphic with two pipes between the respective elements, and recalculate them as the window re-sizes.
+This will draw an SVG graphic with two pipes with text written along each between the respective elements, and recalculate them as the window re-sizes.
 
 Paths can also be added on-demand after loading (e.g., after an AJAX call), by calling **addPaths** with an array of path objects to add (this array has the same options available as when initialising paths).
 
 ```javascript
 var newPaths = [
-  { start: "#red", end: "#green" }, 
-  { start: "#aqua", end: "#green" }
+  { start: "#red", end: "#green", text: "foo" }, 
+  { start: "#aqua", end: "#green", text: "bar" }
  ];
 $("#svgContainer").HTMLSVGconnect("addPaths", newPaths);
 ```
@@ -59,6 +59,7 @@ These are defined as properties at the same level as the *paths* property.
 | orientation | string | Whether the path begins/ends from the side of the element or from the top/bottom. Options: [horizontal &#124; vertical &#124; auto] | auto |
 | offset | integer | Number of pixels added to the path before the first curve. | 0 |
 | class | string | Path class (css) name. | empty |
+| text | string | Text to be written along the path. | empty |
 
 **The global options can also be overridden on a per path basis:**
 
