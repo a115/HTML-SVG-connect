@@ -92,7 +92,7 @@
       return null; // Ignore/invalid.
     },
 
-    _createSvgTextPath(text, strokeWidth, pathId) {
+    _createSvgTextPath: function (text, strokeWidth, pathId) {
       // textPath
       var textPathElement = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
       textPathElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + pathId);
@@ -241,7 +241,7 @@
     /*
      * Draw text for a path, takes the text for a path and the id of the path element and will create a textPath element.
      */
-    drawText(text, $textPath) {
+    drawText: function (text, $textPath) {
       $textPath.text(text);
     },
 
